@@ -1,0 +1,414 @@
+{% block title %}
+    <title>Health Data Form</title>
+{% endblock %}
+
+{% block styles %}
+<style>
+    /* Set the background image */
+    body {
+        background-image: url("{{ url_for('static', filename='flat-lay-desk-concept-with-copy-space.jpg') }}");
+        background-size: cover; /* Cover the entire page */
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-attachment: fixed; /*Fix the background while scrolling */
+        font-family: Arial, sans-serif;
+        color: white; /* Set text color to white for better visibility */
+    }
+
+    /* Style the form container */
+    .container {
+        background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        margin: 50px auto; /* Center the container */
+        text-align: left;
+        font-family: Arial, sans-serif;
+    }
+
+    label {
+        font-size:small;
+        font-weight:bold;
+        color: white ;
+        padding: 0 0.5rem;
+
+    }
+
+    /* Style the form inputs */
+     input[type="number"], input[type="text"] {
+        width: 100%;
+            padding: 0.4rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size:small;
+
+    }
+
+    /* Style the submit button */
+    button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+
+    }
+
+    button:hover {
+        background-color: #45a049; /* Darker green on hover */
+    }
+
+    select {
+            width:auto;
+            padding: 0.4rem;
+            background-color: #3470de;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size:smaller;
+            font-weight:300;
+            cursor: pointer;
+
+    }
+
+    button:hover {
+        background-color: #45a049; /* Darker green on hover */
+    }
+
+    .prediction-text {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        fieldset {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    }
+
+legend {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #4CAF50;
+    padding: 0 0.5rem;
+
+    }
+
+            /* Modal styling */
+            .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .close-button:hover {
+            color: #000;
+        }
+
+        .dropdown-container{
+ 
+            display: flex;
+            gap: 20px;
+            align-items:center;
+
+        }
+
+        .dropdown{
+            padding: 8px 12px;
+            font-size: small;
+            border: 1px solid rgb(85, 83, 83);
+            border-radius: 4px;
+            background-color: rgb(67, 142, 186);
+        }
+
+
+</style>
+
+{% endblock %}
+
+{% block container %}
+<div class="container">
+    <h1>Diabetes Prediction</h1>
+    <form action="/predict" method="post" bag>
+
+        <fieldset>
+            <legend>Personal Information</legend>
+            <label for="ageGroup">Age Group:</label>
+            <select name="ageGroup" id = "ageGroup" class="dropdown">
+                <option value="< 1"> under 1 </option>
+                <option value="15 - 19"> 15 - 19 </option>
+                <option value="20 - 24"> 20 - 24 </option>
+                <option value="25 - 29"> 25 - 29 </option>
+                <option value="30 - 34"> 30 - 34 </option>
+                <option value="35 - 39"> 35 - 39 </option>
+                <option value="40 - 44"> 40 - 44 </option>
+                <option value="45 - 49"> 45 - 49 </option>
+                <option value="50 - 54"> 50 - 54 </option>
+                <option value="55 - 59"> 55 - 59 </option>
+                <option value=">= 60"> Over 60 </option>
+    
+            </select>    <br>
+            <br>
+
+            <label for="bmi">Body Mass Index:</label>
+            <input type="text" id="bmi" name="bmi"><br>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Medical History</legend>
+
+            <label for="WithHypertension">With Hypertension:</label>
+            <select id="withHypertension" name="withHypertension" class="dropdown">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        <br>
+        <br>
+
+            <label for="cvaStroke">CVA Stroke:</label>
+            <select id="cvaStroke" name="cvaStroke" class="dropdown">
+                <option value="1">Low</option>
+                <option value="2">High</option>
+            </select>
+        <br>
+        <br>
+
+        <label for="familyHistory">Family History:</label>
+        <select id="familyHistory" name="familyHistory" class="dropdown">
+            <option value="Asthma">Asthma</option>
+            <option value="Diabetes">Diabetes</option>
+            <option value="Hypertension">Hypertension</option>
+            <option value="None">None</option>
+        </select>
+        <br>
+        <br>
+
+        </fieldset>
+
+
+        <fieldset>
+            
+            <legend>Lifestyle and Habits</legend>
+            <div class = "dropdown-container">
+            <label for="patientLifestyle">Patient Lifestyle:</label>
+            <select id="patientLifestyle" name="patientLifestyle" class="dropdown">
+                <option value="Alcohol consumption">Alcohol consumption</option>
+                <option value="None">None</option>
+                <option value="Physically inactive">Physically inactive</option>
+                <option value="Physically active">Physically active</option>
+                <option value="Smoking">Smoking</option>
+                <option value="Unhealthy diet">Unhealthy diet</option>
+            </select>
+            <br><br>
+        
+            <label for="nutritionalStatus">Nutritional Status:</label>
+            <select  id="nutritionalStatus" name="nutritionalStatus" class="dropdown">
+                <option value="Normal">Normal</option>
+                <option value="Overweight">Overweight</option>
+                <option value="Obese">Obese</option>
+                <option value="Severely Underweight">Severely Underweight</option>
+                <option value="Mild">Mild</option>
+                <option value="MAM">Moderate Acute Malnutrition</option>            
+                <option value="SAM">Severe Acute Malnutrition</option>            
+            </select>
+            <br>
+            <br>
+        </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Diagnosis</legend>
+            <label for="DiagnosedWithHypertension">Diagnosed With Hypertension:</label>
+            <select id="DiagnosedWithHypertension" name="DiagnosedWithHypertension" class="dropdown">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+            <br>
+            <br>
+
+            <label for="bpSystolic">BP Systolic:</label>
+            <input type="text" id="bpSystolic" name="bpSystolic"><br><br>
+    
+            <label for="bpDiastolic">BP Diastolic:</label>
+            <input type="text" id="bpDiastolic" name="bpDiastolic"><br><br>
+    
+            <label for="screenedFor">Screened For:</label>        
+            <select id="screenedFor" name="screenedFor" class="dropdown">
+                <option value="Hypertension">Hypertension</option>
+                <option value="Diabetes">Diabetes</option>
+                <option  value="Hypertension_Diabetes">Hypertension & Diabetes</option>
+            </select>   
+        <br>
+        <br>
+        </fieldset>
+
+
+        <fieldset>
+            <legend>Test Results</legend>
+
+            <label for="glucoseFasting">Glucose Fasting:</label>
+            <input type="text" id="glucoseFasting" name="glucoseFasting"><br><br>
+        
+            <label for="glucoseRandom">Glucose Random:</label>
+            <input type="text" id="glucoseRandom" name="glucoseRandom"><br><br>        
+
+            <div >
+            <label for="screeningResult">Screening Result:</label>
+            <select id="screeningResult" name="screeningResult" class="dropdown">  
+                <option value="Normal">Normal</option>
+                <option value="Positive">Positive</option>
+                <option value="RequiresFBG">RequiresFBG</option>
+            </select>
+
+            <label for="testResult">Test Result:</label>
+            <select  id="testResult" name="testResult" class="dropdown">  
+                <option value="Normal">Normal</option>
+                <option value="NormalNormal">Normal Normal</option>
+                <option value="NormalPositve">Normal Positive</option>
+                <option value="DiabetesPositive">Diabetes Positive</option>
+                <option value="DiabetesNormal">Diabetes Normal</option>
+                <option value="Positive">Positive</option>
+                <option value="PositiveNormal">PositiveNormal</option>
+                <option value="PositivePoitive">Positive Positive</option>
+                </select>   <br>
+            <br>
+            </div>
+
+            <div class = "dropdown-container">
+            <label for="rbgoutcome">RBG Outcome:</label>
+            <select  id="rbgoutcome" name="rbgoutcome" class="dropdown">  
+                <option value="Normal">Normal</option>
+                <option value="Positive">Positive</option>
+                <option value="RequiresFBG">RequiresFBG</option>
+                </select>
+    
+        
+    
+            <label for="fbgoutcome">FBG Outcome:</label>
+            <select id="fbgoutcome" name="fbgoutcome" class="dropdown">  
+                <option value="Normal">Normal</option>
+                <option value="Positive">Positive</option>
+                </select>
+            <br>
+            <br>
+            </div>
+        
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Other Information</legend>
+           
+
+            <div class = "dropdown-container">
+                <label for="tested">Tested:</label>
+            <select name="tested" id="tested" class="dropdown">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        <br>
+        <br>
+
+        <label for="impotence">Importance:</label>     
+        <select id="impotence" name="impotence" class="dropdown">
+          <option value = "1"> Low </option>
+          <option value = "2"> High </option>
+      </select>
+ </div>
+ <br>  
+ 
+ <div class = "dropdown-container">
+     
+            <label for="hivPositive">HIV Positive:</label>
+            <select id="hivPositive" name="hivPositive" class="dropdown">  
+                <option value="1">Yes</option>
+                <option value="0" >No</option>
+                </select>
+            <br>
+            <br></div>
+        </fieldset>
+        <button type="submit">Predict</button>
+    </form>
+</div>
+   
+{% endblock %}
+    <!-- Modal for Prediction Result -->
+    {% if prediction_text %}
+        <div class="modal" id="predictionModal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModal">&times;</span>
+                {% if prediction_text == "You have Been Diagnossed Diabetic" %}
+                <div>
+                    <img src = "../static/diabetes.jpg">
+                </div>
+                    {% else %}
+                <div>
+                    <img src = "../static/stock-photo.jpeg">
+                </div>
+                {%endif%}
+                <div class="prediction-text" >
+                    {{ prediction_text }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% block script %}
+    <script>
+        // JavaScript to handle modal display and close
+        const modal = document.getElementById("predictionModal");
+        const closeButton = document.getElementById("closeModal");
+
+        // Show the modal if prediction_text exists
+        if (`{{prediction_text}}`) {
+            modal.style.display = "flex";
+        }
+
+        // Close the modal when the close button is clicked
+        if (closeButton) {
+            closeButton.addEventListener("click", () => {
+                modal.style.display = "none";
+            });
+        }
+
+        // Close the modal when clicking outside the modal content
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+    {% endblock %}
